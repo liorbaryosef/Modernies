@@ -35,7 +35,11 @@ def modular_inverse(a, n):
     -------
     x: such that (a*x % n) == 1 and 0 <= x < n if one exists, else None
     """
-
+    if n != 0:
+        d, x, y = extended_gcd(a, n)
+        if d == 1:
+            return x % n
+    return None
 
 def modular_exponent(a, d, n):
     """
