@@ -51,6 +51,16 @@ def modular_exponent(a, d, n):
     -------
     b: such that b == (a**d) % n
     """
+    #go through powers of 2 and multiply each time
+    b = 1
+    currentTwoPower = 0
+    prevFactor = a
+    while d>=2**currentTwoPower:
+        if (d//2**currentTwoPower)%2 == 1:
+            b=(b*prevFactor)%n
+        prevFactor = (prevFactor**2)%n
+        currentTwoPower +=1
+    return b
 
 
 def miller_rabin(n):
