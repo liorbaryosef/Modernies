@@ -1,6 +1,7 @@
-import number_theory_functions
+import number_theory_functions as ntf
 
-class RSA():
+
+class RSA:
     def __init__(self, public_key, private_key = None):
         self.public_key = public_key
         self.private_key = private_key
@@ -20,7 +21,17 @@ class RSA():
         * The public key (N,e)
         * The private key (N,d)
         """
-
+        p = ntf.generate_prime(digits)
+        q = ntf.generate_prime(digits)
+        N = p*q
+        phi_N = (p-1)*(q-1)
+        e = 1
+        for i in range(2, phi_N):
+            if ntf.extended_gcd(i, phi_N)[0] == 1:
+                e = i
+                break
+        d = ntf.modular_inverse(e, phi_N)
+        return RSA((N, e), (N, d))
 
     def encrypt(self, m):
         """
@@ -34,7 +45,8 @@ class RSA():
         -------
         c : The encrypted ciphertext
         """
-
+        N, e = self.public_key
+        return ntf.modular_exponent(m, e, N)
 
     def decrypt(self, c):
         """
@@ -48,3 +60,5 @@ class RSA():
         -------
         m : The decrypted plaintext
        """
+        N, d = self.private_key
+        return ntf.modular_exponent(c, d, N)
